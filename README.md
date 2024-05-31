@@ -78,6 +78,30 @@ Next, using the CTE, create the query to generate the final customer summary rep
 
 Complete the challenge in this readme in a `.sql` file.
 
+-- 1. First, create a view that summarizes rental information for each customer. 
+-- The view should include the customer's ID, name, email address, and total number of 
+-- rentals (rental_count)
+create view rental_customer as
+select c.customer_id, c.last_name, c.email,
+count(r.rental_id) as rental_count
+from customer c
+join rental r on c.customer_id = r.customer_id
+group by c.customer_id, c.last_name, c.email;
+
+-- 2. Create a Temporary Table that calculates the total amount paid by each customer
+-- (total_paid). The Temporary Table should use the rental summary view created in Step 1
+-- to join with the payment table and calculate the total amount paid by each customer
+create temporary table total_paid as
+select * from rental_customer,
+sum(payment.amount) as total_amount
+from total_paid t
+join payment p on t.customer_id = p.customer_id
+select * from tt_color_extra;
+
+-- 3. Create a CTE that joins the rental summary View with the customer payment summary Temporary Table
+-- created in Step 2. The CTE should include the customer's name, email address, rental count, and total
+-- amount paid
+
 ## Submission
 
 - Upon completion, run the following commands:
