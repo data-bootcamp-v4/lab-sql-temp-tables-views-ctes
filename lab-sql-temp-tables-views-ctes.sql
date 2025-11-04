@@ -18,7 +18,7 @@ Next, create a Temporary Table that calculates the total amount paid by each cus
 The Temporary Table should use the rental summary view created in Step 1 to join with the payment table and calculate 
 the total amount paid by each customer.*/
 CREATE TEMPORARY TABLE total_paid AS
-SELECT p.customer_id, i.name, SUM(p.amount) AS total_amount
+SELECT p.customer_id, i.name, SUM(p.amount) AS total_paid
 FROM payment p 
 JOIN rental_information i
 ON p.customer_id = i.customer_id
