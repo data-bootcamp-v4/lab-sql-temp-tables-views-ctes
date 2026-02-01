@@ -12,10 +12,7 @@ FROM customer AS c
 LEFT JOIN rental AS r 
 ON c.customer_id = r.customer_id
 GROUP BY 
-c.customer_id, 
-c.first_name, 
-c.last_name, 
-c.email;
+c.customer_id;
 
 -- 2 creación tabla temporal 
 
@@ -36,7 +33,7 @@ LIMIT 1000;
 
 WITH cte_customer_report AS (
     SELECT 
-       t.Nombre, 
+       cl.Nombre, 
 		cl.email, 
         cl.Arriendos, 
         t.total_paid
@@ -45,7 +42,7 @@ WITH cte_customer_report AS (
     ON cl.customer_id = t.customer_id
     )
 SELECT 
-    CONCAT(first_name, ' ', last_name) AS Nombre,
+	Nombre,
     email,
     rental_count,
     total_paid,
