@@ -5,8 +5,7 @@ USE sakila;
 CREATE VIEW clientes_summary AS
 SELECT 
 c.customer_id,
-c.first_name,
-c.last_name,
+CONCAT(c.first_name, ' ', c.last_name) AS Nombre,
 c.email,
 COUNT(r.rental_id) AS rental_count
 FROM customer AS c
@@ -30,28 +29,27 @@ ON cl.customer_id = p.customer_id
 GROUP BY cl.customer_id;
 
 SELECT * 
-FROM temp_pago_clientes 
+FROM temp_pago_cliente 
 LIMIT 1000;
 
 -- creacion CTE
 
 WITH cte_customer_report AS (
     SELECT 
-        cl.first_name, 
-        cl.last_name, 
-        cl.email, 
+       t.Nombre, 
+		cl.email, 
         cl.Arriendos, 
         t.total_paid
     FROM clientes_summary AS cl
-    JOIN temp_pago_cliente AS t
+    inner JOIN temp_pago_cliente AS t
     ON cl.customer_id = t.customer_id
-)
+    )
 SELECT 
-    CONCAT(first_name, ' ', last_name) AS cliente,
+    CONCAT(first_name, ' ', last_name) AS Nombre,
     email,
     rental_count,
     total_paid,
-    ROUND(total_paid / Arriendos, 2) AS pago_promedio
+    ROUND(total_paid / rental_count, 2) AS pago_promedio
 FROM cte_customer_report
 ORDER BY total_paid DESC;
 
@@ -67,7 +65,7 @@ WITH cte_resumen_final AS (
     ON cl.customer_id = t.customer_id
 )
 SELECT 
-    CONCAT(first_name, ' ', last_name) AS customer_name,
+    CONCAT(first_name, ' ', last_name) AS Nombre,
     email,
     rental_count,
     total_paid,
